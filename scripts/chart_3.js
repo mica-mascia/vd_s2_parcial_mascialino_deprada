@@ -72,9 +72,14 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 					curve: "natural",
 					title: reclamosPorHora + ":00",
 				},
-			)
-		)
+			),
+		),
+		
     ],
+	color: {
+		gradient: 'linear',
+		scheme: 'ylorbr',
+	}
 
   })
   d3.select('#dataviz_C').append(() => dataviz_C)
@@ -187,3 +192,87 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 
 
 })
+
+
+
+Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
+
+	reclamosPorEstacion = data.map(function(d) {return d.fecha_ingreso})
+
+	//x: d => d3.timeFormat('%a')(d3.timeParse('%d/%m/%Y')(d.fecha_ingreso)),
+	let test = d3.timeFormat('%j')(d3.timeParse('%d/%m/%Y')('21/12/2021'));
+	console.log(test);
+	console.log(test == 265)
+
+  	reclamosPorEstacion.forEach((item, index, array) => {
+		array[index] = d3.timeFormat('%j')(d3.timeParse('%d/%m/%Y')(array[index]))
+		if(array[index]<79 || array[index]>355){
+			array[index] = "verano"
+		} else if(array[index]<172){
+			array[index] = "otoño"
+		}else if(array[index]<265){
+			array[index] = "invierno"
+		}else{
+			array[index] = "primavera"
+		}
+  })
+
+  let dataviz_F = Plot.plot({
+    // https://github.com/observablehq/plot#projection-options
+    projection: {
+      type: 'mercator',
+      domain: barrios, // Objeto GeoJson a encuadrar
+    },
+	marks: [
+		Plot.density(data, {
+			x: 'lon',
+			y: 'lat',
+			fill: 'density',
+			bandwidth: 5,
+			thresholds: 50
+		}),
+		/* Plot.dot(data, {
+			x: 'lon',
+			y: 'lat',
+			fill: reclamosPorEstacion,
+			r: 1,
+			color: 'black',
+			//bandwidth: 2,
+			//thresholds: 30
+		}), */
+		Plot.geo(barrios, {
+			stroke: 'gray',
+		}),
+	],
+	facet: {
+		data: data,
+		x: reclamosPorEstacion,
+	},
+	fx: {
+		domain: ['verano', 'otoño', 'invierno', 'primavera']
+	},
+	width: 1000,
+	color: {
+		scheme: 'ylorbr',
+	  },
+    /* marks: [
+      Plot.geo(barrios, {
+        stroke: '#bbb',
+      }),
+     Plot.dot(data, {
+        x: 'lon',
+        y: 'lat',
+        r: 4,
+        stroke: 'none',
+        fill: reclamosPorEstacion,
+		opacity: 0.4,
+		//opacity: (d)=>(d.prestacion === "DESRATIZAR, DESINSECTAR Y DESINFECTAR EN VÍA PÚBLICA" ? 0.4 : 0.8),
+      }), 
+    ],*/
+    
+  })
+
+  d3.select('#dataviz_F').append(() => dataviz_F)
+})
+
+

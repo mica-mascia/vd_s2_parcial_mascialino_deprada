@@ -17,7 +17,7 @@ d3.dsv(';', 'data/147_desratizacion.csv', d3.autoType).then(data => {
       })
     
         
-        console.log(data)
+        //console.log(data)
 		let dataviz_B = Plot.plot({
 			marks: [
 				//Plot.axisX({tickFormat: "", labelAnchor: "center", anchor: "bottom", label: "Año" }),
