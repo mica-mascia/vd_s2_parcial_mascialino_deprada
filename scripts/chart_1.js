@@ -32,9 +32,9 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
       n: 5,
       range: ["#e9dfd5", "#cec3ae", "#b8bb9c", "#BACF97", "#9EB47B"],
       label: 'Cantidad de denuncias de ratas',
-	  
       legend: true,
-	  marginLeft: 45
+	    marginLeft: 45,
+      
     },
 
     marks: [
