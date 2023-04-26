@@ -4,88 +4,113 @@ const locale = {
 	grouping: [3],
 }
 
-d3.formatDefaultLocale(locale)
+Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 
-d3.csv('astronautas.csv', d3.autoType).then(data => {
-
-	var edad_mision = data.map(function(d) {return d.edad_mision});
-	var anio_mision = data.map(function(d) {return d.anio_mision});
+	var fecha_ingreso = data.map(function(d) {return d.fecha_ingreso});
+	var fecha_cierre_contacto = data.map(function(d) {return d.fecha_cierre_contacto});
+	const estado_del_contacto = data.map(function(d) {return d.estado_del_contacto});
 	
-	let max_edad_mision = Array(10);
-	max_edad_mision.fill(0);
-	let min_edad_mision = Array(10);
-	min_edad_mision.fill(100);
-	let avg_edad_mision = Array(10);
-	avg_edad_mision.fill(0);
-		
-	for(let anio=2010;anio<=2023;anio++){
-		for(let i=0;i<edad_mision.length;i++){
-			if(anio_mision[i] == anio){
-				
-				if(edad_mision[i] > max_edad_mision[anio-2010]){
-					max_edad_mision[anio-2010] = edad_mision[i];
-				}else if (edad_mision[i] < min_edad_mision[anio-2010]){
-					min_edad_mision[anio-2010] = edad_mision[i];
-				}
-				avg_edad_mision[anio-2010] = (avg_edad_mision[anio-2010] + edad_mision[i])/2;
+	let max_tiempo = Array(12);
+	max_tiempo.fill(0);
+	let min_tiempo = Array(12);
+	min_tiempo.fill(300);
+	let promedio;
+	let mes, fi, fcc;
+	let contar=0;
+
+	for(let i=0; i<estado_del_contacto.length;i++){
+		if(estado_del_contacto[i] === "Cerrado"){
+			if(fecha_ingreso[i][2] == '-'){
+				mes = (d3.timeFormat('%m')(d3.timeParse('%d-%m-%Y')(fecha_ingreso[i])))-1;
+				fi = d3.timeFormat('%j')(d3.timeParse('%d-%m-%Y')(fecha_ingreso[i]));
+			}else{
+				mes = (d3.timeFormat('%m')(d3.timeParse('%d/%m/%Y')(fecha_ingreso[i])))-1;
+				fi = d3.timeFormat('%j')(d3.timeParse('%d/%m/%Y')(fecha_ingreso[i]));
 			}
+			
+			if(fecha_cierre_contacto[i][2] == '-'){
+				fcc = d3.timeFormat('%j')(d3.timeParse('%d-%m-%Y')(fecha_cierre_contacto[i]))
+			}else{
+				fcc = d3.timeFormat('%j')(d3.timeParse('%d/%m/%Y')(fecha_cierre_contacto[i]))
+			}
+			//duracion = (d3.timeFormat('%j')(d3.timeParse('%d/%m/%Y')(fecha_cierre_contacto[i]))) - (d3.timeFormat('%j')(d3.timeParse('%d/%m/%Y')(fecha_ingreso[i])));//+1;
+			duracion = fcc-fi;
+			//console.log(estado_del_contacto[i])
+
+			//console.log("min del mes", mes+1,":", min_tiempo[mes], ". Este valor es", duracion)
+
+			if(duracion > max_tiempo[mes]){
+				max_tiempo[mes] = duracion
+			}else if(duracion < min_tiempo[mes]){
+				min_tiempo[mes] = duracion
+			}
+
+			if(typeof promedio === 'undefined'){
+				promedio = duracion
+				//console.log("new!")
+			}else{
+				promedio = (promedio + duracion)/2
+				if(mes == 0){
+					console.log("duración: ",duracion, "entre",fecha_ingreso[i],"y",fecha_cierre_contacto[i], "(caso",i,")")
+				}
+			}
+
+			//console.log(promedio)
 		}
 	}
 
+	console.log(max_tiempo)
+	console.log(min_tiempo)
+	console.log(contar);
 
-	let dataviz_4 = Plot.plot({
-		marks: [
-			Plot.axisX({tickFormat: "", labelAnchor: "center", anchor: "bottom", label: "Año" }),
-			Plot.axisY({label: "Edades", marginTop: 20 }),
-			Plot.areaY(data, {
-				x: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
-				y1: max_edad_mision,
-				y2: min_edad_mision,
-				dy: -16,
-				//opacity: 0.5,
-				curve: 'natural',
-				fill: 'gray',
-			}),
-			Plot.line(data, {
-				x: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
-				y: avg_edad_mision,
-				stroke: '#EE6C2F',
-				curve: 'natural',
-				dy: -16,
-			}),
-			Plot.dot(data, {
-				x: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
-				y: avg_edad_mision,
-				stroke: '#EE6C2F',
-				dy: -16,
-			}),
-			Plot.text(avg_edad_mision.slice(9), {
-				x: [2019],
-				y: avg_edad_mision[9],
-				text: ["Promedio"],
-				fill: "#EE6C2F",
-				fontWeight: "bold",
-				dx: 40,
-				dy: -15,
-				fontSize: "13px",
-			}),
-		],
-		x: {
-			tickFormat: 'd',
-			grid: true,
-		},
-		y: {
-			tickFormat: d3.format(',.0f'),
-			grid: true,
-		},
-		color:{
-			legend: true,
-		},
-		marginLeft: 70,
-		marginRight: 70,
-		insetTop: 15,
-		line: true,
-	})
-	d3.select('#dataviz_4').append(() => dataviz_4)
+
+
+  let dataviz_C = Plot.plot({
+	marks: [
+		Plot.axisX({labelAnchor: "center", anchor: "bottom", label: "Mes" }),
+		Plot.axisY({label: "Espera para la resolución", marginTop: 20 }),
+		Plot.areaY(data, {
+			x: [1,2,3,4,5,6,7,8,9,10,11,12],//['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+			y1: max_tiempo,
+			y2: min_tiempo,
+			dy: -16,
+			//opacity: 0.5,
+			curve: 'natural',
+			fill: 'gray',
+		}),
+		Plot.line(data, {
+			x: [1,2,3,4,5,6,7,8,9,10,11,12],//['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+			y: 12,
+			stroke: '#EE6C2F',
+			curve: 'natural',
+			dy: -16,
+		}),
+		Plot.text(12, {
+			x: [12],//['Diciembre'],
+			y: 12,
+			text: ["Promedio"],
+			fill: "#EE6C2F",
+			fontWeight: "bold",
+			dx: 40,
+			dy: -15,
+			fontSize: "13px",
+		}),
+	],
+	x: {
+		tickFormat: 'd',
+		grid: true,
+	},
+	y: {
+		tickFormat: d3.format(',.0f'),
+		grid: true,
+	},
+	color:{
+		legend: true,
+	},
+	marginLeft: 70,
+	marginRight: 70,
+	insetTop: 15,
+	line: true,
 })
-//#endregion
+d3.select('#dataviz_C').append(() => dataviz_C)
+})
