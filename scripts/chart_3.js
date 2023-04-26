@@ -33,11 +33,10 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 			}else{
 				fcc = d3.timeFormat('%j')(d3.timeParse('%d/%m/%Y')(fecha_cierre_contacto[i]))
 			}
-			//duracion = (d3.timeFormat('%j')(d3.timeParse('%d/%m/%Y')(fecha_cierre_contacto[i]))) - (d3.timeFormat('%j')(d3.timeParse('%d/%m/%Y')(fecha_ingreso[i])));//+1;
 			duracion = fcc-fi;
-			//console.log(estado_del_contacto[i])
+			
 
-			//console.log("min del mes", mes+1,":", min_tiempo[mes], ". Este valor es", duracion)
+			
 
 			if(duracion > max_tiempo[mes]){
 				max_tiempo[mes] = duracion
@@ -47,7 +46,7 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 
 			if(typeof promedio === 'undefined'){
 				promedio = duracion
-				//console.log("new!")
+				
 			}else{
 				promedio = (promedio + duracion)/2
 				if(mes == 0){
@@ -55,7 +54,7 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 				}
 			}
 
-			//console.log(promedio)
+			
 		}
 	}
 
@@ -81,7 +80,7 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 		Plot.line(data, {
 			x: [1,2,3,4,5,6,7,8,9,10,11,12],//['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
 			y: 12,
-			stroke: '#EE6C2F',
+			stroke: '#BACF97',
 			curve: 'natural',
 			dy: -16,
 		}),
