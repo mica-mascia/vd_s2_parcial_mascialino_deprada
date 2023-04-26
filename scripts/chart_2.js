@@ -52,7 +52,9 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 	},
 	width: 1000,
 	color: {
-		scheme: 'blues',
+		type: "linear",
+		scheme: 'greens',
+      
 	  },
   })
 

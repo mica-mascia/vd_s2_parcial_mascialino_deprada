@@ -12,75 +12,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,800;1,200&display=swap" rel="stylesheet">
     <title>Ratas en la ciudad</title>
     <style>
-      *{
-        font-family: 'Noto Sans', sans-serif;
-      }
-      #chart{
-        overflow-y:auto;
-      }
-      #chart svg{
-        max-width: initial;
-      }
+          *{
+            font-family: 'Noto Sans', sans-serif;
+          }
+          #chart{
+            overflow-y:auto;
+          }
+          #chart svg{
+            max-width: initial;
+          }
 
-    .banner {
-        position: absolute;
-        display: inline-block;
-    }
-    .bannerText {
-        position: relative;
-    }
-
-    .textHeader {
-        background-color: #ee4b00;
-        font-size: 1.2em;
-    }
-
-    .textHeaderHover:hover {
-        color: #F9E442;
-        border: 2px solid #F9E442;
-        border-radius: 10px;
-    }
-
-    .redirecciones {
-        color: transparent;
-    }
-
-    .redirecciones:hover {
-        color: transparent;
-    }
-
-    .change {
-        background-color: #22201E;
-        transition: all .55s ease-in-out;
-    }
-
-    .bannerButton:hover {
-        background-color: #ee4b00;
-    }
-
-    .bannerButton {
-        background-color: transparent;
-        border-color: #EE4B00;
-        text-decoration-line: none;
-    }
-
-    .toolbox {
-        background-color: #E47846;
-    }
-
-    .topic {
-        color: #E47846;
-
-    }
-
-    .title {
-        color: #E47846;
-    }
-
-    .blanckTextHover:hover {
-        color: black!important;
-    }
-
+          .banner {
+              position: absolute;
+              display: inline-block;
+          }
+          .bannerText {
+              position: relative;
+          }
     </style>
   </head>
   <body>
@@ -97,8 +45,8 @@
                 
                 <div class="border p-5 m-5" style="background-color: #ebebeb8c;">
                   <h1 class="m-3 fw-medium" style="color: #5A5A5A; font-size: 250%;">El problema sanitario en CABA</h1>
-                  <h3 class="m-3" style="color: #3D3D3D;">El problema de las ratas en la ciudad es algo que va creciendo cada vez mas y no discrimina comunas. Hay muchas gente que contribuye a combatir esta problematica de la higiene en la ciudad pero hay muchos otros que ante la presencia de esto deciden ignorarlo.</h3>
-                  <button type="button" class="btn btn-outline-success btn-lg m-3">Conoce como podes ayudar</button>
+                  <h3 class="m-3 pb-4" style="color: #3D3D3D;">El problema de las ratas en la ciudad es algo que va creciendo cada vez mas y no discrimina comunas. Hay muchas gente que contribuye a combatir esta problematica de la higiene en la ciudad pero hay muchos otros que ante la presencia de esto deciden ignorarlo.</h3>
+                  <a class="p-3 m-3 text-white rounded" style="background-color: #9EB47B; text-decoration: none;" href="#page-1">Conoce como podes ayudar</a>
                 </div>
 
               </div>
@@ -106,43 +54,45 @@
       </scroll-page>
   </scroll-container>
 
-
-
-    <div class="p-5">
-      <div class="container-fluid px-5">
-        <div class="container-fluid px-5 m-0">
-          <div class="row">
-            <div class="col">
-              <div id="dataviz_A"></div>
-            </div>
-            <div class="col d-flex justify-content-center align-items-center">
-              <h5 class="fw-light">Como se ve en el grafico hay muchas mas denuncias de ratas en barrios como Palermo, Villa Urquiza, Caballito, Flores y Mataderos. Pero esto no precisamente quiere decir que los demas barrios son mas limpios, sino que puede ser que en realidad, la gente decide ignorar mas la higiene de la ciudad o por algo poblacional. Dado que estos barrios tienen mas poblacion, tiene sentido pensar que ante mas gente haya, mas denuncias tambien van a haber y no se puede concluir con esto si un barrio es mas limpio que otro.</h5>     
-            </div>
-          </div>
-          <div class="row py-5">
-            <div class="col d-flex justify-content-center align-items-center">
-              <h5 class="fw-light">Un claro ejemplo de esto es si observamos la cantidad de denuncias por estaciones. Aca podemos ver que lejos de disminuir las denuncias por ratas, aumentan en verano donde la ciudad tiende a estar mas vacia por el exodo turistico en comparacion con el invierno.              </h5>
-            </div>
-            <div class="col d-flex justify-content-center align-items-center">
-              <div>
-                <div id="dataviz_F"></div>
-                <div id="dataviz_FA"></div>
+  <scroll-container>
+    <scroll-page id="page-1">
+        <div class="p-5">
+          <div class="container-fluid px-5">
+            <div class="container-fluid px-5 m-0">
+              <div class="row">
+                <div class="col">
+                  <div id="dataviz_A"></div>
+                </div>
+                <div class="col d-flex justify-content-center align-items-center">
+                  <h5 class="fw-light">Como se ve en el grafico hay muchas mas denuncias de ratas en barrios como Palermo, Villa Urquiza, Caballito, Flores y Mataderos. Pero esto no precisamente quiere decir que los demas barrios son mas limpios, sino que puede ser que en realidad, la gente decide ignorar mas la higiene de la ciudad o por algo poblacional. Dado que estos barrios tienen mas poblacion, tiene sentido pensar que ante mas gente haya, mas denuncias tambien van a haber y no se puede concluir con esto si un barrio es mas limpio que otro.</h5>     
+                </div>
               </div>
-               <!--<p>Si queda este gráfico, habría que ponerlo más bonito. Pero no da mucha data; la distribución de reclamos por horas es casi exactamente un gráfico de horarios en que la gente está despierta :T</p> -->
+              <div class="row py-5">
+                <div class="col d-flex justify-content-center align-items-center">
+                  <h5 class="fw-light">Un claro ejemplo de esto es si observamos la cantidad de denuncias por estaciones. Aca podemos ver que lejos de disminuir las denuncias por ratas, aumentan en verano donde la ciudad tiende a estar mas vacia por el exodo turistico en comparacion con el invierno.              </h5>
+                </div>
+                <div class="col d-flex justify-content-center align-items-center">
+                  <div>
+                    <div id="dataviz_F"></div>
+                    <div id="dataviz_FA"></div>
+                  </div>
+                  <!--<p>Si queda este gráfico, habría que ponerlo más bonito. Pero no da mucha data; la distribución de reclamos por horas es casi exactamente un gráfico de horarios en que la gente está despierta :T</p> -->
+                </div>
+              </div>
+              <div class="row py-5">
+                <div class="col">
+                  <div id="dataviz_D"></div>           
+                </div>
+                <div class="col d-flex justify-content-center align-items-center">
+                  <h5 class="fw-light">Una rata de alcantarilla suele tener entre 7 u 8 crias las cuales tienen un tiempo de gestacion de 21 dias. Sin mencionar la cantidad de veces que una rata podria reproducirse con varias hembras. Si dejaramos pasar el problema, la cantidad de ratas en la ciudad podria crecer de manera exponencial en cuestion de meses. Por eso es importante que tomemos responsabilidad ciudadana y denunciemos estos avistamientos a traves de los canales de comunicacion que nos brinda el gobierno de la ciudad.</h5>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="row py-5">
-            <div class="col">
-              <div id="dataviz_D"></div>           
-            </div>
-            <div class="col d-flex justify-content-center align-items-center">
-              <h5 class="fw-light">Una rata de alcantarilla suele tener entre 7 u 8 crias las cuales tienen un tiempo de gestacion de 21 dias. Sin mencionar la cantidad de veces que una rata podria reproducirse con varias hembras. Si dejaramos pasar el problema, la cantidad de ratas en la ciudad podria crecer de manera exponencial en cuestion de meses. Por eso es importante que tomemos responsabilidad ciudadana y denunciemos estos avistamientos a traves de los canales de comunicacion que nos brinda el gobierno de la ciudad.</h5>
-            </div>
-          </div>
+      
         </div>
-      </div>
-  
-    </div>
+    </scroll-page>
+  </scroll-container>
     
 
 
