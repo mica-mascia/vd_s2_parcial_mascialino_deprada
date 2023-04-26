@@ -26,6 +26,10 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
       type: 'mercator',
       domain: barrios,
     },
+	style: {
+		fontFamily: "Noto Sans",
+		fontSize: "20px",
+	  },
 	marks: [
 		Plot.density(data, {
 			x: 'lon',
@@ -60,6 +64,10 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
       type: 'mercator',
       domain: barrios, // Objeto GeoJson a encuadrar
     },
+	style: {
+		fontFamily: "Noto Sans",
+		fontSize: "20px",
+	  },
 	marks: [
 		Plot.density(data, {
 			x: 'lon',
