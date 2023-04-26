@@ -2,7 +2,6 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 
 	reclamosPorEstacion = data.map(function(d) {return d.fecha_ingreso})
 
-	//x: d => d3.timeFormat('%a')(d3.timeParse('%d/%m/%Y')(d.fecha_ingreso)),
 	let test = d3.timeFormat('%j')(d3.timeParse('%d/%m/%Y')('21/12/2021'));
 	console.log(test);
 	console.log(test == 265)
@@ -20,7 +19,7 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 		}
   })
 
-  let dataviz_F = Plot.plot({
+  let dataviz_B = Plot.plot({
     // https://github.com/observablehq/plot#projection-options
     projection: {
       type: 'mercator',
@@ -58,9 +57,9 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 	  },
   })
 
-  d3.select('#dataviz_F').append(() => dataviz_F)
+  d3.select('#dataviz_B').append(() => dataviz_B)
 
-  let dataviz_FA = Plot.plot({
+  let dataviz_B2 = Plot.plot({
     // https://github.com/observablehq/plot#projection-options
     projection: {
       type: 'mercator',
@@ -96,6 +95,6 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
   
   })
 
-  d3.select('#dataviz_FA').append(() => dataviz_FA)
+  d3.select('#dataviz_B2').append(() => dataviz_B2)
 })
 
