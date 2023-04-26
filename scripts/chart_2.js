@@ -1,55 +1,100 @@
-const locale = {
-	decimal: ',',
-	thousands: '.',
-	grouping: [3],
-}
+Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 
-d3.formatDefaultLocale(locale)
-// La idea seria responder a la pregunta de en que epocas hay mas denuncias de ratas
-// En el eje Y debe estar la cantidad de denuncias y en el x las fechas (tiempo)
+	reclamosPorEstacion = data.map(function(d) {return d.fecha_ingreso})
 
+	//x: d => d3.timeFormat('%a')(d3.timeParse('%d/%m/%Y')(d.fecha_ingreso)),
+	let test = d3.timeFormat('%j')(d3.timeParse('%d/%m/%Y')('21/12/2021'));
+	console.log(test);
+	console.log(test == 265)
 
+  	reclamosPorEstacion.forEach((item, index, array) => {
+		array[index] = d3.timeFormat('%j')(d3.timeParse('%d/%m/%Y')(array[index]))
+		if(array[index]<79 || array[index]>355){
+			array[index] = "verano"
+		} else if(array[index]<172){
+			array[index] = "otoño"
+		}else if(array[index]<265){
+			array[index] = "invierno"
+		}else{
+			array[index] = "primavera"
+		}
+  })
 
-d3.dsv(';', 'data/147_desratizacion.csv', d3.autoType).then(data => {
+  let dataviz_F = Plot.plot({
+    // https://github.com/observablehq/plot#projection-options
+    projection: {
+      type: 'mercator',
+      domain: barrios,
+    },
+	marks: [
+		Plot.density(data, {
+			x: 'lon',
+			y: 'lat',
+			fill: 'density',
+			bandwidth: 5,
+			thresholds: 50
+		}),
+		
+		Plot.geo(barrios, {
+			stroke: 'gray',
+		}),
+	],
+	facet: {
+		data: data,
+		x: reclamosPorEstacion,
+	},
+	fx: {
+		domain: ['verano', 'otoño']
+	},
+	width: 1000,
+	color: {
+		scheme: 'blues',
+	  },
+  })
 
-    data.forEach(d => {
-        d.fecha_ingreso = new Date(d.fecha_ingreso)
-      })
-    
-        
-        //console.log(data)
-		let dataviz_B = Plot.plot({
-			marks: [
-				//Plot.axisX({tickFormat: "", labelAnchor: "center", anchor: "bottom", label: "Año" }),
-				//Plot.axisY({anchor: "left", label: "Porcentaje"})
+  d3.select('#dataviz_F').append(() => dataviz_F)
 
-				Plot.areaY(data, {
-					x: "fecha_ingreso",
-					y: d3.group(data.filter(d=> d.categoria != "BARRIOS EMERGENTES"), d => d.fecha_ingreso),
-					
-					//curve: 'natural',
-					//opacity: 0.5,
-				}),
+  let dataviz_FA = Plot.plot({
+    // https://github.com/observablehq/plot#projection-options
+    projection: {
+      type: 'mercator',
+      domain: barrios, // Objeto GeoJson a encuadrar
+    },
+	marks: [
+		Plot.density(data, {
+			x: 'lon',
+			y: 'lat',
+			fill: 'density',
+			bandwidth: 5,
+			thresholds: 50
+		}),
+		/* Plot.dot(data, {
+			x: 'lon',
+			y: 'lat',
+			fill: reclamosPorEstacion,
+			r: 1,
+			color: 'black',
+			//bandwidth: 2,
+			//thresholds: 30
+		}), */
+		Plot.geo(barrios, {
+			stroke: 'gray',
+		}),
+	],
+	facet: {
+		data: data,
+		x: reclamosPorEstacion,
+	},
+	fx: {
+		domain: ['invierno', 'primavera']
+	},
+	width: 1000,
+	color: {
+		scheme: 'greens',
+	  },
+  
+  })
 
-			],
+  d3.select('#dataviz_FA').append(() => dataviz_FA)
+})
 
-
-			//x: {
-			//	tickFormat: 'd',
-			//},
-			//y: {
-			//	tickFormat: d3.format(',.0f'),
-			//	grid: true,
-			//},
-			//color:{
-			//	range: ["grey", "#EE6D2F"], 
-			//	type: "categorical",
-//legend: true,
-			//	//marginLeft: 50,
-			//},
-			//line: true,
-		})
-		d3.select('#dataviz_B').append(() => dataviz_B)
-	}
-)
-//#endregion

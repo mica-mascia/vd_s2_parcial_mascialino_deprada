@@ -6,15 +6,13 @@ const dataFetch = d3.dsv(';', 'data/147_desratizacion.csv', d3.autoType)
 
 Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
   
-  const reclamosPorBarrio = d3.group(data.filter(d=> d.categoria != "BARRIOS EMERGENTES"), d => d.domicilio_barrio) // crea un Map
+  const reclamosPorBarrio = d3.group(data.filter(d=> d.categoria != "BARRIOS EMERGENTES"), d => d.domicilio_barrio)
 
   /* A cada feature del mapa le agregamos la prop DENUNCIAS */
   barrios.features.forEach(d => {
     let nombreBarrio = d.properties.BARRIO
     let cantReclamos =  reclamosPorBarrio.get(nombreBarrio).length
     d.properties.DENUNCIAS = cantReclamos
-
-    //console.log(nombreBarrio + ': ' + cantReclamos)
   })
 
 
@@ -57,7 +55,6 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
     ],
   })
 
-  /* Agregamos al DOM la visualización chartMap */
   d3.select('#dataviz_A').append(() => dataviz_A)
 
 
