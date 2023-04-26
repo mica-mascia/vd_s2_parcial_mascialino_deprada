@@ -217,6 +217,9 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 		}
   })
 
+
+
+
   let dataviz_F = Plot.plot({
     // https://github.com/observablehq/plot#projection-options
     projection: {
@@ -249,11 +252,11 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 		x: reclamosPorEstacion,
 	},
 	fx: {
-		domain: ['verano', 'otoño', 'invierno', 'primavera']
+		domain: ['verano', 'otoño']
 	},
 	width: 1000,
 	color: {
-		scheme: 'ylorbr',
+		scheme: 'greens',
 	  },
     /* marks: [
       Plot.geo(barrios, {
@@ -273,6 +276,72 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
   })
 
   d3.select('#dataviz_F').append(() => dataviz_F)
-})
 
+
+
+
+
+
+
+
+
+
+
+  let dataviz_FA = Plot.plot({
+    // https://github.com/observablehq/plot#projection-options
+    projection: {
+      type: 'mercator',
+      domain: barrios, // Objeto GeoJson a encuadrar
+    },
+	marks: [
+		Plot.density(data, {
+			x: 'lon',
+			y: 'lat',
+			fill: 'density',
+			bandwidth: 5,
+			thresholds: 50
+		}),
+		/* Plot.dot(data, {
+			x: 'lon',
+			y: 'lat',
+			fill: reclamosPorEstacion,
+			r: 1,
+			color: 'black',
+			//bandwidth: 2,
+			//thresholds: 30
+		}), */
+		Plot.geo(barrios, {
+			stroke: 'gray',
+		}),
+	],
+	facet: {
+		data: data,
+		x: reclamosPorEstacion,
+	},
+	fx: {
+		domain: ['invierno', 'primavera']
+	},
+	width: 1000,
+	color: {
+		scheme: 'greens',
+	  },
+    /* marks: [
+      Plot.geo(barrios, {
+        stroke: '#bbb',
+      }),
+     Plot.dot(data, {
+        x: 'lon',
+        y: 'lat',
+        r: 4,
+        stroke: 'none',
+        fill: reclamosPorEstacion,
+		opacity: 0.4,
+		//opacity: (d)=>(d.prestacion === "DESRATIZAR, DESINSECTAR Y DESINFECTAR EN VÍA PÚBLICA" ? 0.4 : 0.8),
+      }), 
+    ],*/
+    
+  })
+
+  d3.select('#dataviz_FA').append(() => dataviz_FA)
+})
 
