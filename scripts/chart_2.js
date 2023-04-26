@@ -68,15 +68,6 @@ Promise.all([mapaFetch, dataFetch]).then(([barrios, data]) => {
 			bandwidth: 5,
 			thresholds: 50
 		}),
-		/* Plot.dot(data, {
-			x: 'lon',
-			y: 'lat',
-			fill: reclamosPorEstacion,
-			r: 1,
-			color: 'black',
-			//bandwidth: 2,
-			//thresholds: 30
-		}), */
 		Plot.geo(barrios, {
 			stroke: 'gray',
 		}),
